@@ -27,8 +27,49 @@ function shuffle(array) {
 
     return array;
 }
-
-
+function match(firstCard,secondCard)
+{
+    if(firstCard.firstChild.className==secondCard.firstChild.className)
+    {
+        firstCard.className='card match';
+        secondCard.className='card match';
+        return true;
+    }
+    return false;
+}
+function notMatch(firstCard,secondCard)
+{
+    firstCard.className='card';
+    secondCard.className='card';
+}
+let openCards=[] ;
+function AddCard(card)
+{
+    if(openCards.length==0)
+        {
+            openCards.push(card);
+        }
+    else 
+        {
+            firstCard=openCards[0];
+            let isMatch=match(firstCard,card);
+            if(!isMatch)
+                {
+                    notMatch(firstCard,card);
+                }
+            openCards.shift;
+        }
+}
+deck.addEventListener('click',function(Event){
+    if (Event.target.nodeName==='LI'&&Event.target.className==="card")
+    {
+         console.log(Event.target.className);
+          Event.target.classList.add('show');
+          Event.target.classList.add('open');
+          AddCard(Event.target);
+    }
+    
+})
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
