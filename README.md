@@ -29,4 +29,6 @@ The game ends once all cards have been correctly matched.
 1. [Download](https://github.com/mohamed1refaie/memory-game/archive/master.zip) or [Clone](https://github.com/mohamed1refaie/memory-game.git) the Repository.
 2. Open `index.html` file to view the project in your browser.
 
+Or you can just play it from [here](https://mohamed1refaie.github.io/memoryGame/)
+
 
