@@ -72,15 +72,28 @@ function AddCard(card)
            
         }
 }
-
 let Counter=0;
 let moves=document.querySelector('.moves');
+function updateStars(){
+    if(Counter==19)
+    {
+        let thirdStar=document.querySelector('#third');
+        thirdStar.className="fa fa-star-o";
+    }
+    else if(Counter==25)
+    {
+         let secondStar=document.querySelector('#second');
+         secondStar.className="fa fa-star-o";   
+    }
+}
+
 deck.addEventListener('click',function(Event){
     if (Event.target.nodeName==='LI'&&Event.target.className==="card")
     {
           
            Counter++;
            moves.textContent=Counter;
+           updateStars();
           AddCard(Event.target)
           
     }
