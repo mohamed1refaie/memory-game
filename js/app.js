@@ -2,19 +2,19 @@ let cards = ['fa fa-diamond','fa fa-diamond','fa fa-paper-plane-o','fa fa-paper-
 
 let openCards=[] ;
 let Counter=0;
-let matchs=0;
+let matchs=0;   // number of matched cards so far
+let stop=0;     // boolean to mark it true to stop the timer when i finished
+let start = new Date().getTime(),elapsed = '0.0'; 
 let moves=document.querySelector('.moves');
 let restartBtn=document.querySelector('.restart');
 let deck=document.querySelector('.deck');
 let seconds=document.querySelector('.time');
 let modal = document.querySelector(".modal");
 let button = document.querySelector(".button");
-let stop=0;
-let start = new Date().getTime(),elapsed = '0.0';
 let interval = window.setInterval(elapsedTime, 100);
 
-function elapsedTime()
-{
+// calculate the elapsed time so far
+function elapsedTime() {
     if(stop==1)clearInterval(interval);
     let time = new Date().getTime() - start;
     elapsed = Math.floor(time / 100) / 10;
@@ -22,7 +22,7 @@ function elapsedTime()
     seconds.textContent = elapsed;
 }
 
-
+//shuffle a given array
 function shuffle(array) {
     let currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -37,7 +37,8 @@ function shuffle(array) {
     return array;
 }
 
-function initiate(){
+// initiate the deck
+function initiate() {
     cards = shuffle(cards);
     let deck = document.querySelector('.deck');
     for(let i=0;i<cards.length;i++)
@@ -52,11 +53,13 @@ function initiate(){
 }
 
 initiate();
+
 function toggleModal() {
     modal.classList.toggle("show-modal");
 }
-function match(firstCard,secondCard)
-{
+
+// given two cards check if they match or no
+function match(firstCard,secondCard) {
     if(firstCard.firstChild.className==secondCard.firstChild.className)
     {
         firstCard.className='card match';
@@ -66,20 +69,22 @@ function match(firstCard,secondCard)
     return false;
 }
 
-function notMatch(firstCard,secondCard)
-{
+// reset the two unmatched cards to the normal css classes
+function notMatch(firstCard,secondCard) {
     firstCard.className='card';
     secondCard.className='card';
 }
 
-function showforawhile(card,callback){
+//show the second card for 200 ms 
+function showforawhile(card,callback) {
      setTimeout(()=>{
         callback('done')
-    },200)
-    card.classList.add('show');
-    card.classList.add('open');
+    },200);
+    showCard(card);
+
 }
-function updateStars(third,second){
+
+function updateStars(third,second) {
 
     let thirdStar=document.getElementById(third);
     let secondStar=document.getElementById(second);
@@ -95,21 +100,19 @@ function updateStars(third,second){
     else if(Counter==0)
     {
         thirdStar.className="fa fa-star";
-        secondStar.className="fa fa-star";   
+        secondStar.className="fa fa-star";
 
     }
 }
 
-function updateModal()
-{
+// update the modal content
+function updateModal() {
     let modalBody=document.querySelector('.modal-body');
     modalBody.textContent="You have finished in "+Counter+" moves and in "+elapsed+" seconds";
-    updateStars("thirdStar","secondStar");
-
+	    updateStars("thirdStar","secondStar");
 }
 
-function win()
-{
+function win() {
     if(matchs==16)
     {
         stop=1;
@@ -118,14 +121,12 @@ function win()
     }
 }
 
-function showCard(card)
-{
+function showCard(card) {
     card.classList.add('show');
     card.classList.add('open');
 }
 
-function AddCard(card)
-{
+function AddCard(card) {
     if(openCards.length==0)
     {
         showCard(card);
@@ -134,40 +135,36 @@ function AddCard(card)
     else 
     {
         showforawhile(card,()=>{
-        firstCard=openCards[0];
-        let isMatch = match(firstCard,card);
-        if(!isMatch)notMatch(firstCard,card);
-        else 
-        {
-            matchs+=2;
-            win();
-        }
-        openCards=[];
-        })  
+	        firstCard=openCards[0];
+	        let isMatch = match(firstCard,card);
+	        if(!isMatch)notMatch(firstCard,card);
+	        else 
+	        {
+	            matchs+=2;
+	            win();
+	        }
+	        openCards=[];
+        });
     }
 }
 
 
-deck.addEventListener('click',function(Event){
+deck.addEventListener('click',function(Event) {
     if (Event.target.nodeName==='LI'&&Event.target.className==="card")
     {
-          
            Counter++;
            moves.textContent=Counter;
            updateStars("third","second");
-           AddCard(Event.target)
-          
+           AddCard(Event.target);
     }
 })
 
-function clear()
-{
+function clear() {
     for(let i=0;i<cards.length;i++)
         deck.firstElementChild.remove();
 }
 
-function restart()
-{
+function restart() {
     clear();
     initiate();
     Counter=0;
@@ -185,14 +182,3 @@ button.addEventListener('click',function(Event){
     restart();
 })
 
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a list of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
