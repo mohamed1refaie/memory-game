@@ -5,7 +5,21 @@ let Counter=0;
 let moves=document.querySelector('.moves');
 let restartBtn=document.querySelector('.restart');
 let deck=document.querySelector('.deck');
+let seconds=document.querySelector('.time');
 // Shuffle function from http://stackoverflow.com/a/2450976
+
+
+let start = new Date().getTime(),elapsed = '0.0';
+
+window.setInterval(function()
+{
+    var time = new Date().getTime() - start;
+    elapsed = Math.floor(time / 100) / 10;
+    if(Math.round(elapsed) == elapsed) { elapsed += '.0'; }
+    seconds.textContent = elapsed;
+    //console.log(elapsed);
+}, 100);
+
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -35,7 +49,6 @@ function initiate(){
 }
 
 initiate();
-
 
 function match(firstCard,secondCard)
 {
@@ -131,6 +144,7 @@ restartBtn.addEventListener('click',function(Event){
     Counter=0;
     moves.textContent=Counter;
     updateStars();
+    start = new Date().getTime(),elapsed = '0.0';
     
 })
 /*
