@@ -1,18 +1,10 @@
 let cards = ['fa fa-diamond','fa fa-diamond','fa fa-paper-plane-o','fa fa-paper-plane-o','fa fa-anchor','fa fa-anchor','fa fa-bolt','fa fa-bolt','fa fa-cube','fa fa-cube','fa fa-leaf','fa fa-leaf','fa fa-bicycle','fa fa-bicycle','fa fa-bomb','fa fa-bomb'];
 
-
-cards = shuffle(cards);
-let deck = document.querySelector('.deck');
-for(let i=0;i<cards.length;i++)
-{
-	let card = document.createElement('li');
-    card.className='card';
-    let pic=document.createElement('i');
-    pic.className=cards[i];
-    card.appendChild(pic);
-    deck.appendChild(card);
-}
-
+let openCards=[] ;
+let Counter=0;
+let moves=document.querySelector('.moves');
+let restartBtn=document.querySelector('.restart');
+let deck=document.querySelector('.deck');
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -27,6 +19,24 @@ function shuffle(array) {
 
     return array;
 }
+
+function initiate(){
+    cards = shuffle(cards);
+    let deck = document.querySelector('.deck');
+    for(let i=0;i<cards.length;i++)
+    {
+        let card = document.createElement('li');
+        card.className='card';
+        let pic=document.createElement('i');
+        pic.className=cards[i];
+        card.appendChild(pic);
+        deck.appendChild(card);
+    }
+}
+
+initiate();
+
+
 function match(firstCard,secondCard)
 {
     if(firstCard.firstChild.className==secondCard.firstChild.className)
@@ -37,12 +47,13 @@ function match(firstCard,secondCard)
     }
     return false;
 }
+
 function notMatch(firstCard,secondCard)
 {
     firstCard.className='card';
     secondCard.className='card';
 }
-let openCards=[] ;
+
 function showforawhile(card,callback){
      setTimeout(()=>{
         callback('done')
@@ -51,6 +62,7 @@ function showforawhile(card,callback){
     card.classList.add('show');
     card.classList.add('open');
 }
+
 function AddCard(card)
 {
     if(openCards.length==0)
@@ -72,18 +84,25 @@ function AddCard(card)
            
         }
 }
-let Counter=0;
-let moves=document.querySelector('.moves');
+
+
 function updateStars(){
+    let thirdStar=document.querySelector('#third');
+    let secondStar=document.querySelector('#second');
+
     if(Counter==19)
-    {
-        let thirdStar=document.querySelector('#third');
+    { 
         thirdStar.className="fa fa-star-o";
     }
     else if(Counter==25)
     {
-         let secondStar=document.querySelector('#second');
          secondStar.className="fa fa-star-o";   
+    }
+    else if(Counter==0)
+    {
+        thirdStar.className="fa fa-star";
+        secondStar.className="fa fa-star";   
+
     }
 }
 
@@ -97,6 +116,22 @@ deck.addEventListener('click',function(Event){
           AddCard(Event.target)
           
     }
+})
+
+function clear()
+{
+    for(let i=0;i<cards.length;i++)
+        deck.firstElementChild.remove();
+}
+
+restartBtn.addEventListener('click',function(Event){
+    
+    clear();
+    initiate();
+    Counter=0;
+    moves.textContent=Counter;
+    updateStars();
+    
 })
 /*
  * set up the event listener for a card. If a card is clicked:
