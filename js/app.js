@@ -43,37 +43,52 @@ function notMatch(firstCard,secondCard)
     secondCard.className='card';
 }
 let openCards=[] ;
+function showforawhile(card,callback){
+     setTimeout(()=>{
+        callback('done')
+    },200)
+    console.log('should show ')
+    card.classList.add('show');
+    card.classList.add('open');
+}
 function AddCard(card)
 {
     if(openCards.length==0)
         {
+             card.classList.add('show');
+             card.classList.add('open');
             openCards.push(card);
         }
     else 
         {
-            firstCard=openCards[0];
-            let isMatch=match(firstCard,card);
-            if(!isMatch)
-                {
-                    notMatch(firstCard,card);
-                }
-            openCards.shift;
+             showforawhile(card,()=>{
+                firstCard=openCards[0];
+                let isMatch = match(firstCard,card);
+                console.log(firstCard.className+" "+card.className);
+                if(!isMatch)notMatch(firstCard,card);
+                openCards=[];
+            })
+                
+           
         }
 }
+
+let Counter=0;
+let moves=document.querySelector('.moves');
 deck.addEventListener('click',function(Event){
     if (Event.target.nodeName==='LI'&&Event.target.className==="card")
     {
-         console.log(Event.target.className);
-          Event.target.classList.add('show');
-          Event.target.classList.add('open');
-          AddCard(Event.target);
+          
+           Counter++;
+           moves.textContent=Counter;
+          AddCard(Event.target)
+          
     }
-    
 })
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
+ *  - add the card to a list of "open" cards (put this functionality in another function that you call from this one)
  *  - if the list already has another card, check to see if the two cards match
  *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
  *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
